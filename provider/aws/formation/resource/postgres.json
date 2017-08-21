@@ -4,6 +4,15 @@
     "BlankDBSnapshotIdentifier": { "Fn::Equals": [ { "Ref": "DBSnapshotIdentifier"}, "" ] }
   },
   "Parameters": {
+    "Database": {
+      "Type": "String",
+      "Default": "app"
+    },
+    "DBSnapshotIdentifier": {
+      "Type": "String",
+      "Default": "",
+      "Description": "ARN of database snapshot to restore"
+    },
     "Password": {
       "MinLength": "8",
       "NoEcho": true,
@@ -45,7 +54,8 @@
         "AllocatedStorage": "10",
         "DBInstanceClass": "db.t2.micro",
         "DBInstanceIdentifier": { "Ref": "AWS::StackName" },
-        "DBName": "app",
+        "DBName": { "Fn::If": [ "BlankDBSnapshotIdentifier", { "Ref": "Database" }, { "Ref": "AWS::NoValue" } ] },
+        "DBSnapshotIdentifier": { "Fn::If": [ "BlankDBSnapshotIdentifier", { "Ref": "AWS::NoValue" }, { "Ref": "DBSnapshotIdentifier" } ] },
         "DBParameterGroupName": { "Ref": "ParameterGroup" },
         "DBSubnetGroupName": { "Ref": "SubnetGroup" },
         "Engine": "postgres",
