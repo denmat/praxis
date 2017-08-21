@@ -1,5 +1,8 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
+  "Conditions": {
+    "BlankDBSnapshotIdentifier": { "Fn::Equals": [ { "Ref": "DBSnapshotIdentifier"}, "" ] }
+  },
   "Parameters": {
     "Password": {
       "MinLength": "8",
